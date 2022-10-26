@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"path"
 	"runtime"
-	"runtime/debug"
 )
 
 // Setup test, create table, insert seed and return func to tear down table
@@ -30,8 +29,7 @@ func Setup(filename string, db *sql.DB) func() {
 }
 
 func rootPath() string {
-	debug.PrintStack()
-	_, filename, _, _ := runtime.Caller(5)
+	_, filename, _, _ := runtime.Caller(6)
 	fmt.Println(filename)
 	return path.Join(path.Dir(filename), "..")
 }
