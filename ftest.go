@@ -31,9 +31,11 @@ func Setup(filename string, db *sql.DB) func() {
 func rootPath() string {
 	_, filename1, _, _ := runtime.Caller(1)
 	_, filename2, _, _ := runtime.Caller(0)
+	_, filename3, _, _ := runtime.Caller(2)
 	_, filename, _, _ := runtime.Caller(0)
 	fmt.Println(filename1)
 	fmt.Println(filename2)
+	fmt.Println(filename3)
 	return path.Join(path.Dir(filename), "..")
 }
 
