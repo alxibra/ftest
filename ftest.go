@@ -10,6 +10,7 @@ import (
 
 // Setup test, create table, insert seed and return func to tear down table
 func Setup(filename string, db *sql.DB) func() {
+	fmt.Println("FORSTOK test library")
 	fmt.Println("*** SETUP")
 	createTable(filename, db)
 	insertSeed(filename, db)
