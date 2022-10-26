@@ -10,7 +10,6 @@ import (
 
 // Setup test, create table, insert seed and return func to tear down table
 func Setup(filename string, db *sql.DB) func() {
-	fmt.Println("FORSTOK test library")
 	fmt.Println("*** SETUP")
 	createTable(filename, db)
 	insertSeed(filename, db)
@@ -30,7 +29,11 @@ func Setup(filename string, db *sql.DB) func() {
 }
 
 func rootPath() string {
-	_, filename, _, _ := runtime.Caller(1)
+	_, filename1, _, _ := runtime.Caller(1)
+	_, filename2, _, _ := runtime.Caller(0)
+	_, filename, _, _ := runtime.Caller(0)
+	fmt.Println(filename1)
+	fmt.Println(filename2)
 	return path.Join(path.Dir(filename), "..")
 }
 
