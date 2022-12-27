@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"path"
 	"runtime"
+	"strings"
 )
 
 // Setup test, create table, insert seed and return func to tear down table
@@ -20,9 +21,12 @@ func Setup(filename string, db *sql.DB) func() {
 		if err != nil {
 			panic(err)
 		}
-		_, err = db.Exec(string(c))
-		if err != nil {
-			panic(err)
+		qs := splitQuery(string(c))
+		for _, q := range qs {
+			_, err = db.Exec(q)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	return fn
@@ -41,9 +45,13 @@ func createTable(fn string, db *sql.DB) {
 	if err != nil {
 		panic(err)
 	}
-	_, err = db.Exec(string(c))
-	if err != nil {
-		panic(err)
+
+	qs := splitQuery(string(c))
+	for _, q := range qs {
+		_, err = db.Exec(q)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -54,8 +62,22 @@ func insertSeed(fn string, db *sql.DB) {
 	if err != nil {
 		panic(err)
 	}
-	_, err = db.Exec(string(c))
-	if err != nil {
-		panic(err)
+
+	qs := splitQuery(string(c))
+	for _, q := range qs {
+		_, err = db.Exec(q)
+		if err != nil {
+			panic(err)
+		}
 	}
+}
+
+func splitQuery(str string) []string {
+	cleanup := strings.TrimRight(str, "\t\r\n")
+	qs := strings.Split(cleanup, ";")
+	qs = qs[:len(qs)-1]
+	for i, q := range qs {
+		qs[i] = fmt.Sprintf("%s;", q)
+	}
+	return qs
 }
